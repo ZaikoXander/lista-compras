@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { SafeAreaView, StyleSheet, Text } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 
 import api from "../api";
 
@@ -8,7 +8,7 @@ import type { ISelectedProduct } from "./ShoppingList";
 interface IShoppingList {
   id: string
   products: ISelectedProduct[]
-  createdAt: Date
+  createdAt: number
 }
 
 export default function LastShoppingList() {
@@ -20,12 +20,10 @@ export default function LastShoppingList() {
     return shoppingLists
   }
 
-  async function getLastShoppingList() {
-    const shoppingLists = await fetchShoppingLists()
-
-    const dateSortedShoppingLists = shoppingLists.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-
-    const mostRecentShoppingList = dateSortedShoppingLists[0]
+  async function getLastShoppingList(): Promise<void> {
+    const shoppingLists: IShoppingList[] = await fetchShoppingLists()
+    const dateSortedShoppingLists: IShoppingList[] = shoppingLists.sort((a, b) => b.createdAt - a.createdAt)
+    const mostRecentShoppingList: IShoppingList = dateSortedShoppingLists[0]
 
     setLastShoppingList(mostRecentShoppingList)
   }
@@ -33,20 +31,53 @@ export default function LastShoppingList() {
   useEffect(() => {
     getLastShoppingList()
   }, [])
-  
+
+  function getLastShoppingListTotal(): string | undefined {
+    const lastShoppingListTotal: number | undefined = lastShoppingList?.products.reduce((acc, curr) => acc + Number(curr.price) * curr.quantity, 0)
+    const lastShoppingListTotalToString: string | undefined = lastShoppingListTotal?.toFixed(2)
+
+    return lastShoppingListTotalToString
+  }
+
+  function formatPrice(price: string): string {
+    return price.replace('.', ',')
+  }
+
+  const lastShoppingListTotal: string | undefined = getLastShoppingListTotal()
+  const formattedLastShoppingListTotal: string | undefined = lastShoppingListTotal ? formatPrice(lastShoppingListTotal) : undefined
+  const lastShoppingListLocaleDateString: string | undefined =
+    lastShoppingList ? new Date((lastShoppingList.createdAt * 1000)).toLocaleString() : undefined
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Última compra</Text>
-      {
-        lastShoppingList?.products.map((product) => {
-          const formattedPrice = product.price.replace('.', ',')
+      <Text style={[styles.title, { marginBottom: 10 }]}>Última compra</Text>
+      <View style={{ gap: 10 }}>
+        {
+          lastShoppingList?.products.map(({ id, name, price, quantity }) => {
+            const formattedPrice = formatPrice(price)
 
-          return (
-            <Text key={product.id}>{product.name} - R$ {formattedPrice} - {product.quantity}</Text>
-          )
-        })
-      }
+            return (
+              <View key={id}>
+                <Text>Produto: {name}</Text>
+                <Text>Preço: R$ {formattedPrice}</Text>
+                <Text>Quantidade: {quantity}</Text>
+              </View>
+            )
+          })
+        }
+      </View>
+      <View style={{ marginTop: 30, }}>
+        {
+          lastShoppingListLocaleDateString ?
+            <Text style={{ fontWeight: "bold", fontSize: 17 }}>Data: {lastShoppingListLocaleDateString}</Text>
+            : null
+        }
+        {
+          formattedLastShoppingListTotal ?
+            <Text style={{ fontWeight: "bold", fontSize: 17 }}>Total: R$ {formattedLastShoppingListTotal}</Text>
+            : null
+        }
+      </View>
     </SafeAreaView>
   );
 }

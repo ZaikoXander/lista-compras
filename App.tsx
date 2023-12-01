@@ -1,24 +1,29 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import ProductList from './screens/ProductList';
 import ProductEditor from './screens/ProductEditor';
 import ShoppingList from './screens/ShoppingList';
-
-import type TRootStackParamList from './screens/types/TRootStackParamList';
 import LastShoppingList from './screens/LastShoppingList';
 
-const Stack = createStackNavigator<TRootStackParamList>();
+import type TRootStackParamList from './screens/types/TRootStackParamList';
+
+const Drawer = createDrawerNavigator<TRootStackParamList>();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Última compra">
-        <Stack.Screen name="Lista de produtos" component={ProductList} />
-        <Stack.Screen name="Criar/Editar produto" component={ProductEditor} />
-        <Stack.Screen name="Lista de compras" component={ShoppingList} />
-        <Stack.Screen name="Última compra" component={LastShoppingList} />
-      </Stack.Navigator>
+      <Drawer.Navigator initialRouteName="Última compra">
+        <Drawer.Screen name="Lista de produtos" component={ProductList} />
+        <Drawer.Screen name="Criar/Editar produto" component={ProductEditor} initialParams={
+          {
+            mode: 'create',
+            updateListListener: () => {}
+          }
+        } />
+        <Drawer.Screen name="Lista de compras" component={ShoppingList} />
+        <Drawer.Screen name="Última compra" component={LastShoppingList} />
+      </Drawer.Navigator>
     </NavigationContainer>
   );
 }

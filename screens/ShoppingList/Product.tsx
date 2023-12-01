@@ -21,7 +21,7 @@ export default function Product({ product, removeProduct, hideButtons, showQuant
   return (
     <View style={styles.productContainer}>
       <View>
-        <Text>Nome: {name}</Text>
+        <Text>Produto: {name}</Text>
         <Text>Preço: R$ {formattedPrice}</Text>
         { !showQuantity && <Text>Quantidade: {quantity}</Text> }
       </View>

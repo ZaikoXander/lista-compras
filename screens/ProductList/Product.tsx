@@ -34,7 +34,7 @@ export default function Product({ navigation, product, updateListListener }: IPr
   return (
     <View style={styles.productContainer}>
       <View>
-        <Text>Nome: {product.name}</Text>
+        <Text>Produto: {product.name}</Text>
         <Text>Preço: R$ {formattedPrice}</Text>
       </View>
       <Pressable onPress={() => handleEditProduct()} style={styles.editButton}>

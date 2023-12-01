@@ -3,13 +3,13 @@ import { FlatList, Text, StyleSheet, Pressable, SafeAreaView, View } from "react
 
 import api from "../../api";
 
-import type { StackNavigationProp } from "@react-navigation/stack";
-import type TRootStackParamList from "../types/TRootStackParamList";
-import type IProduct from "./types/IProduct";
-
 import Product from "./Product";
 
 import productListStyles from "./productListStyles";
+
+import type { StackNavigationProp } from "@react-navigation/stack";
+import type IProduct from "./types/IProduct";
+import type TRootStackParamList from "../types/TRootStackParamList";
 
 interface IProductListProps {
   navigation: StackNavigationProp<TRootStackParamList, 'Lista de produtos'>
