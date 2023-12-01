@@ -9,6 +9,7 @@ type TRootStackParamList = {
   },
   "Lista de compras": undefined
   "Última compra": undefined
+  "Histórico de compras": undefined
 }
 
 export default TRootStackParamList

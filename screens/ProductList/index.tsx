@@ -6,6 +6,7 @@ import api from "../../api";
 import Product from "./Product";
 
 import productListStyles from "./productListStyles";
+import { Ionicons } from '@expo/vector-icons'
 
 import type { StackNavigationProp } from "@react-navigation/stack";
 import type IProduct from "./types/IProduct";
@@ -49,9 +50,26 @@ export default function ProductList({ navigation }: IProductListProps) {
           keyExtractor={(item) => item.id}
         />
       </View>
-      <Pressable onPress={handleAddProduct} style={styles.addButton}>
-        <Text style={productListStyles.buttonText}>Adicionar Produto</Text>
-      </Pressable>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 10 }}>
+        <Pressable
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: 'blue',
+            borderRadius: 10,
+            paddingVertical: 5,
+            paddingHorizontal: 10,
+            gap: 5
+          }}
+          onPress={loadProducts}
+        >
+          <Ionicons name="reload" size={20} color="white" />
+          <Text style={{ color: 'white' }}>Atualizar lista</Text>
+        </Pressable>
+        <Pressable onPress={handleAddProduct} style={styles.addButton}>
+          <Text style={productListStyles.buttonText}>Adicionar Produto</Text>
+        </Pressable>
+      </View>
     </SafeAreaView>
   )
 }
@@ -68,7 +86,6 @@ const styles = StyleSheet.create({
   },
   addButton: {
     backgroundColor: 'lightgreen',
-    marginTop: 10,
     ...productListStyles.button,
   }
 });

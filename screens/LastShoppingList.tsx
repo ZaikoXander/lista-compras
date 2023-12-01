@@ -1,24 +1,17 @@
 import { useEffect, useState } from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 
-import api from "../api";
+import { fetchShoppingLists } from "./requests/shoppingList";
 
-import type { ISelectedProduct } from "./ShoppingList";
+import {
+  getShoppingListTotalValue as getLastShoppingListTotalValue
+} from "./utils/getShoppingListTotalValue"
+import formatPrice from "./utils/formatPrice";
 
-interface IShoppingList {
-  id: string
-  products: ISelectedProduct[]
-  createdAt: number
-}
+import type IShoppingList from "./types/IShoppingList";
 
 export default function LastShoppingList() {
   const [lastShoppingList, setLastShoppingList] = useState<IShoppingList>()
-
-  async function fetchShoppingLists(): Promise<IShoppingList[]> {
-    const { data: shoppingLists } = await api.get<IShoppingList[]>('/shoppingList')
-
-    return shoppingLists
-  }
 
   async function getLastShoppingList(): Promise<void> {
     const shoppingLists: IShoppingList[] = await fetchShoppingLists()
@@ -32,18 +25,7 @@ export default function LastShoppingList() {
     getLastShoppingList()
   }, [])
 
-  function getLastShoppingListTotal(): string | undefined {
-    const lastShoppingListTotal: number | undefined = lastShoppingList?.products.reduce((acc, curr) => acc + Number(curr.price) * curr.quantity, 0)
-    const lastShoppingListTotalToString: string | undefined = lastShoppingListTotal?.toFixed(2)
-
-    return lastShoppingListTotalToString
-  }
-
-  function formatPrice(price: string): string {
-    return price.replace('.', ',')
-  }
-
-  const lastShoppingListTotal: string | undefined = getLastShoppingListTotal()
+  const lastShoppingListTotal: string | undefined = getLastShoppingListTotalValue(lastShoppingList)
   const formattedLastShoppingListTotal: string | undefined = lastShoppingListTotal ? formatPrice(lastShoppingListTotal) : undefined
   const lastShoppingListLocaleDateString: string | undefined =
     lastShoppingList ? new Date((lastShoppingList.createdAt * 1000)).toLocaleString() : undefined
@@ -66,7 +48,7 @@ export default function LastShoppingList() {
           })
         }
       </View>
-      <View style={{ marginTop: 30, }}>
+      <View style={{ marginTop: 30 }}>
         {
           lastShoppingListLocaleDateString ?
             <Text style={{ fontWeight: "bold", fontSize: 17 }}>Data: {lastShoppingListLocaleDateString}</Text>

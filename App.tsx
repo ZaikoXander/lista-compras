@@ -1,29 +1,31 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { NavigationContainer } from '@react-navigation/native'
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 
-import ProductList from './screens/ProductList';
-import ProductEditor from './screens/ProductEditor';
-import ShoppingList from './screens/ShoppingList';
-import LastShoppingList from './screens/LastShoppingList';
+import ProductList from './screens/ProductList'
+import ProductEditor from './screens/ProductEditor'
+import ShoppingList from './screens/ShoppingList'
+import LastShoppingList from './screens/LastShoppingList'
+import PastShoppings from './screens/PastShoppings'
 
-import type TRootStackParamList from './screens/types/TRootStackParamList';
+import type TRootStackParamList from './screens/types/TRootStackParamList'
 
-const Drawer = createDrawerNavigator<TRootStackParamList>();
+const Tab = createMaterialTopTabNavigator<TRootStackParamList>()
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Última compra">
-        <Drawer.Screen name="Lista de produtos" component={ProductList} />
-        <Drawer.Screen name="Criar/Editar produto" component={ProductEditor} initialParams={
+      <Tab.Navigator initialRouteName="Lista de compras">
+        <Tab.Screen name="Lista de produtos" component={ProductList} />
+        <Tab.Screen name="Criar/Editar produto" component={ProductEditor} initialParams={
           {
             mode: 'create',
             updateListListener: () => {}
           }
         } />
-        <Drawer.Screen name="Lista de compras" component={ShoppingList} />
-        <Drawer.Screen name="Última compra" component={LastShoppingList} />
-      </Drawer.Navigator>
+        <Tab.Screen name="Lista de compras" component={ShoppingList} />
+        <Tab.Screen name="Última compra" component={LastShoppingList} />
+        <Tab.Screen name="Histórico de compras" component={PastShoppings} />
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }

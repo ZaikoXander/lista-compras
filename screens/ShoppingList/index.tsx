@@ -2,8 +2,10 @@ import { useEffect, useState } from "react"
 import { FlatList, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native"
 
 import api from "../../api"
-import type IProduct from "../ProductList/types/IProduct"
+
 import Product from "./Product"
+
+import type IProduct from "../ProductList/types/IProduct"
 
 export interface ISelectedProduct extends IProduct {
   quantity: number
